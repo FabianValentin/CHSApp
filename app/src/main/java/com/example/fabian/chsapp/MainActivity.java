@@ -24,4 +24,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, GenerateQrActivity.class);
         startActivity(intent);
     }
+
+    public void saveContact(View view) {
+        Intent intent = new Intent(this, SaveContact.class);
+        startActivity(intent);
+    }
 }

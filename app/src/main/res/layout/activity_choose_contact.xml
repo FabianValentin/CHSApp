@@ -23,10 +23,9 @@
         tools:ignore="UnknownId" />
 
     <ListView
-        android:id="@+id/list"
+        android:id="@android:id/list"
         android:layout_width="395dp"
         android:layout_height="530dp"
-        android:choiceMode="singleChoice"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:layout_editor_absoluteY="8dp"

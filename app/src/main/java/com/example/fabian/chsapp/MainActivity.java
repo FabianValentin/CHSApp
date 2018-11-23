@@ -1,5 +1,6 @@
 package com.example.fabian.chsapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,18 +16,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void startScanQR(View view) {
-        Intent intent = new Intent(this, ScanQrActivity.class);
+    public void add(View view) {
+        Intent intent = new Intent(this, AddContactActivity.class);
         startActivity(intent);
     }
 
-    public void startGenerateQR(View view) {
-        Intent intent = new Intent(this, GenerateQrActivity.class);
-        startActivity(intent);
-    }
-
-    public void saveContact(View view) {
-        Intent intent = new Intent(this, SaveContact.class);
+    public void send(View view) {
+        Intent intent = new Intent(this, ChooseContactActivity.class);
         startActivity(intent);
     }
 }

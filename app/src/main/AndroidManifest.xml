@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -35,7 +36,10 @@
 
         <activity android:name=".GenerateQrActivity" />
         <activity android:name=".ChooseContactActivity" />
-        <activity android:name=".SaveContact"></activity>
+        <activity android:name=".SaveContactActivity" />
+        <activity android:name=".AddContactActivity" />
+        <activity android:name=".SendContactActivity" />
+        <activity android:name=".SendEmail"></activity>
     </application>
 
 </manifest>

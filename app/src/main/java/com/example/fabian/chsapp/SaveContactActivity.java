@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class SaveContact extends AppCompatActivity {
+public class SaveContactActivity extends AppCompatActivity {
 
     private Button btn;
     @Override

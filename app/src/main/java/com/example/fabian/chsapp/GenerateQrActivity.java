@@ -24,44 +24,35 @@ public class GenerateQrActivity extends AppCompatActivity {
 
     String name;
     String number;
-    public static final int REQUEST_CODE = 1;
-    TextView contactName;
-    TextView contactNumber;
-    Button gen_button;
-    Button search_button;
+
     Button send_contact;
+
     ImageView imgView;
-    String textName;
-    String textNumber;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generate_qr);
+        Intent intent = getIntent();
 
-        contactName = findViewById(R.id.contactName);
-        contactName.setText("Contact Name..");
-        contactNumber = findViewById(R.id.contactNumber);
-        contactNumber.setText("Contact Number..");
-        gen_button = findViewById(R.id.GenerateButton);
-        search_button = findViewById(R.id.contactSearch);
+        name = "Fabian";//intent.getStringExtra("contactName");
+        number = "000";//intent.getStringExtra("contactNumber");
         send_contact = findViewById(R.id.sendContact);
         imgView = findViewById(R.id.imageView);
-        imgView.setVisibility(View.INVISIBLE);
-        gen_button.setOnClickListener(new View.OnClickListener() {
+        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+        try{
+            BitMatrix bitMatrix = multiFormatWriter.encode(name+"\n"+number, BarcodeFormat.QR_CODE, 200,200);
+            BarcodeEncoder barcodeDetector = new BarcodeEncoder();
+            Bitmap bitmap = barcodeDetector.createBitmap(bitMatrix);
+            imgView.setImageBitmap(bitmap);
+            imgView.setVisibility(View.VISIBLE);
+        }catch (WriterException e) {
+            e.printStackTrace();
+        }
+        send_contact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-                try{
-                    textName = contactName.getText().toString().trim();
-                    textNumber = contactNumber.getText().toString().trim();
-                    BitMatrix bitMatrix = multiFormatWriter.encode(textName+"\n"+textNumber, BarcodeFormat.QR_CODE, 200,200);
-                    BarcodeEncoder barcodeDetector = new BarcodeEncoder();
-                    Bitmap bitmap = barcodeDetector.createBitmap(bitMatrix);
-                    imgView.setImageBitmap(bitmap);
-                    imgView.setVisibility(View.VISIBLE);
-                }catch (WriterException e) {
-                    e.printStackTrace();
-                }
+
             }
         });
 
@@ -74,52 +65,5 @@ public class GenerateQrActivity extends AppCompatActivity {
             }
         });*/
 
-    }
-
-    public void startChooseContact(View view) {
-        Intent intent = new Intent(view.getContext(), ChooseContactActivity.class);
-        startActivityForResult(intent, REQUEST_CODE);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        switch (requestCode){
-            case REQUEST_CODE:
-                if(resultCode == Activity.RESULT_OK){
-                    send_contact.setVisibility(View.VISIBLE);
-                    search_button.setVisibility(View.INVISIBLE);
-                    name = data.getStringExtra("contactName");
-                    number = data.getStringExtra("contactNumber");
-                    contactName.setText(name);
-                    contactNumber.setText(number);
-
-                    gen_button.setVisibility(View.VISIBLE);
-                }
-        }
-    }
-
-    public void sendContact(View view) {
-        Log.i("Send email", "");
-
-        String[] TO = {"someone@gmail.com"};
-        String[] CC = {"xyz@gmail.com"};
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-        emailIntent.setData(Uri.parse("mailto:"));
-        emailIntent.setType("text/plain");
-
-
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
-        emailIntent.putExtra(Intent.EXTRA_CC, CC);
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Your contact");
-        emailIntent.putExtra(Intent.EXTRA_TEXT, "Name: " + name + "\n" + "Number: " + number);
-
-        try {
-            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-            finish();
-            Log.i("Finished sending email", "");
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(GenerateQrActivity.this,
-                    "There is no email client installed.", Toast.LENGTH_SHORT).show();
-        }
     }
 }

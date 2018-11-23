@@ -80,10 +80,7 @@ public class ScanQrActivity extends AppCompatActivity {
                     textView.post(new Runnable() {
                         @Override
                         public void run() {
-                            //Vibrator vibrator = (Vibrator)getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-                                    //vibrator.vibrate(1000);
                             textView.setText(qrCode.valueAt(0).displayValue);
-
                             Button open = findViewById(R.id.open);
                             open.setVisibility(View.VISIBLE);
                             Button send = findViewById(R.id.send);

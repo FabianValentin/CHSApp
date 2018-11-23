@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.os.Bundle;
+import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -32,11 +33,10 @@ public class ChooseContactActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_contact);
         lv = findViewById(android.R.id.list);
-        lv.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+        lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
         button = findViewById(R.id.choose);
         loadContacts();
         lv.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_checked, contacte));
-
     }
 
     private void loadContacts(){
@@ -63,30 +63,34 @@ public class ChooseContactActivity extends ListActivity {
                     }
                     cursor2.close();
                 }
-
             }
         }
         cursor.close();
-
     }
 
-
     public void setupEndActivityButton(View view) {
-        int p = lv.getCheckedItemPosition();
-        if(p!=ListView.INVALID_POSITION) {
+        int p = lv.getCheckedItemCount();//lv.getCheckedItemPosition();
+        SparseBooleanArray checked = lv.getCheckedItemPositions();
+        ArrayList<String> contacts = new ArrayList<>();
+        for(int i = 0; i < checked.size() ; i++){
+            int key = checked.keyAt(i);
+            String s = ((TextView)lv.getChildAt(key)).getText().toString();
+            contacts.add(s);
+        }
+
+        /*if(p!=ListView.INVALID_POSITION) {
             String s = ((TextView)lv.getChildAt(p)).getText().toString();
             int lastSpace = s.lastIndexOf(' ' );
             String name = s.substring(0, lastSpace);
-            String number = s.substring(lastSpace);
-            Intent intent = getIntent();
-            intent.putExtra("contactName", name);
-            intent.putExtra("contactNumber", number);
-            setResult(Activity.RESULT_OK, intent);
-            finish();
+            String number = s.substring(lastSpace);*/
+            Intent intent = new Intent(this, SendContactActivity.class);
+            intent.putExtra("contacts",contacts);
+            /*intent.putExtra("contactName", name);
+            intent.putExtra("contactNumber", number);*/
+            startActivity(intent);
             //Toast.makeText(MainActivity.this, "Selected item is " + s, Toast.LENGTH_LONG).show();
-        }else{
+        /*}else{
             Toast.makeText(this, "Nothing Selected..", Toast.LENGTH_LONG).show();
-        }
-
+        }*/
     }
 }

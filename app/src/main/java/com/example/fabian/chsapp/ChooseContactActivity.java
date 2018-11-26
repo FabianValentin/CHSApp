@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AbsListView;
@@ -27,7 +28,8 @@ public class ChooseContactActivity extends ListActivity {
     private Button button;
     private ListView lv;
     private List<String> contacte = new ArrayList<>();
-
+    private String s = "";
+    private CheckedTextView ctv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,39 +60,36 @@ public class ChooseContactActivity extends ListActivity {
                             new String[]{id}, null);
                     while (cursor2.moveToNext()) {
                         String phoneNumber = cursor2.getString(cursor2.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        name.replaceAll("\\s","");
+                        phoneNumber.replaceAll("\\s","");
                         build = name + " " + phoneNumber;
-                        contacte.add(build);
+                        if(!contacte.contains(build))
+                            contacte.add(build);
                     }
                     cursor2.close();
                 }
             }
         }
         cursor.close();
+        java.util.Collections.sort(contacte);
     }
 
     public void setupEndActivityButton(View view) {
-        int p = lv.getCheckedItemCount();//lv.getCheckedItemPosition();
-        SparseBooleanArray checked = lv.getCheckedItemPositions();
-        ArrayList<String> contacts = new ArrayList<>();
-        for(int i = 0; i < checked.size() ; i++){
-            int key = checked.keyAt(i);
-            String s = ((TextView)lv.getChildAt(key)).getText().toString();
-            contacts.add(s);
+        int noContacts = lv.getCheckedItemCount();
+        if(noContacts == 0){
+            Toast.makeText(view.getContext(),"You have not select any contact",Toast.LENGTH_SHORT).show();
         }
-
-        /*if(p!=ListView.INVALID_POSITION) {
-            String s = ((TextView)lv.getChildAt(p)).getText().toString();
-            int lastSpace = s.lastIndexOf(' ' );
-            String name = s.substring(0, lastSpace);
-            String number = s.substring(lastSpace);*/
+        else {
+            SparseBooleanArray checked = lv.getCheckedItemPositions();
+            ArrayList<String> contacts = new ArrayList<>();
+            for (int i = 0; i < checked.size(); i++) {
+                int key = checked.keyAt(i);
+                s = ((TextView) lv.getChildAt(key)).getText().toString();
+                contacts.add(s);
+            }
             Intent intent = new Intent(this, SendContactActivity.class);
-            intent.putExtra("contacts",contacts);
-            /*intent.putExtra("contactName", name);
-            intent.putExtra("contactNumber", number);*/
+            intent.putExtra("contacts", contacts);
             startActivity(intent);
-            //Toast.makeText(MainActivity.this, "Selected item is " + s, Toast.LENGTH_LONG).show();
-        /*}else{
-            Toast.makeText(this, "Nothing Selected..", Toast.LENGTH_LONG).show();
-        }*/
+        }
     }
 }

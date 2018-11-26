@@ -55,15 +55,5 @@ public class GenerateQrActivity extends AppCompatActivity {
 
             }
         });
-
-       /* search_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(view.getContext(), ChooseContactActivity.class);
-                startActivityForResult(intent, REQUEST_CODE);
-            }
-        });*/
-
     }
 }

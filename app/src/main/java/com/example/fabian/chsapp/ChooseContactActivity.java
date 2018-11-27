@@ -1,13 +1,11 @@
 package com.example.fabian.chsapp;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AbsListView;
@@ -20,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ChooseContactActivity extends ListActivity {
@@ -30,6 +27,7 @@ public class ChooseContactActivity extends ListActivity {
     private List<String> contacte = new ArrayList<>();
     private String s = "";
     private CheckedTextView ctv;
+    private ArrayList<String> contacteChecked = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +37,16 @@ public class ChooseContactActivity extends ListActivity {
         button = findViewById(R.id.choose);
         loadContacts();
         lv.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_checked, contacte));
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if(contacteChecked.contains(contacte.get(i)))
+                    contacteChecked.remove(contacte.get(i));
+                else
+                    contacteChecked.add(contacte.get(i));
+            }
+        });
     }
 
     private void loadContacts(){
@@ -60,8 +68,6 @@ public class ChooseContactActivity extends ListActivity {
                             new String[]{id}, null);
                     while (cursor2.moveToNext()) {
                         String phoneNumber = cursor2.getString(cursor2.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        name.replaceAll("\\s","");
-                        phoneNumber.replaceAll("\\s","");
                         build = name + " " + phoneNumber;
                         if(!contacte.contains(build))
                             contacte.add(build);
@@ -80,15 +86,8 @@ public class ChooseContactActivity extends ListActivity {
             Toast.makeText(view.getContext(),"You have not select any contact",Toast.LENGTH_SHORT).show();
         }
         else {
-            SparseBooleanArray checked = lv.getCheckedItemPositions();
-            ArrayList<String> contacts = new ArrayList<>();
-            for (int i = 0; i < checked.size(); i++) {
-                int key = checked.keyAt(i);
-                s = ((TextView) lv.getChildAt(key)).getText().toString();
-                contacts.add(s);
-            }
             Intent intent = new Intent(this, SendContactActivity.class);
-            intent.putExtra("contacts", contacts);
+            intent.putExtra("contacts", contacteChecked);
             startActivity(intent);
         }
     }

@@ -36,7 +36,6 @@
 
         <activity android:name=".GenerateQrActivity" />
         <activity android:name=".ChooseContactActivity" />
-        <activity android:name=".SaveContactActivity" />
         <activity android:name=".AddContactActivity" />
         <activity android:name=".SendContactActivity" />
         <activity android:name=".SendEmail"></activity>

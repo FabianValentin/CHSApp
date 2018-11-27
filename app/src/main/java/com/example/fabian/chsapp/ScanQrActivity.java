@@ -1,6 +1,7 @@
 package com.example.fabian.chsapp;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -13,12 +14,16 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScanQrActivity extends AppCompatActivity {
 
@@ -62,7 +67,6 @@ public class ScanQrActivity extends AppCompatActivity {
             @Override
             public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
                 cameraSource.stop();
-
             }
         });
 
@@ -75,40 +79,20 @@ public class ScanQrActivity extends AppCompatActivity {
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> qrCode = detections.getDetectedItems();
-
                 if(qrCode.size() != 0) {
-                    textView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            textView.setText(qrCode.valueAt(0).displayValue);
-                            Button open = findViewById(R.id.open);
-                            open.setVisibility(View.VISIBLE);
-                            Button send = findViewById(R.id.send);
-                            send.setVisibility(View.VISIBLE);
-
-                        }
-                    });
+                     String[] contacts;
+                     ArrayList<String> contactsToBeSaved = new ArrayList<>();
+                     contacts = qrCode.toString().split("\\n");
+                     int i;
+                     for(i = 0 ; i < contacts.length ; i++) {
+                         contactsToBeSaved.add(contacts[i]);
+                     }
+                     Intent intent = new Intent();
+                     intent.putExtra("contacts",contactsToBeSaved);
+                     setResult(Activity.RESULT_OK,intent);
+                     finish();
                 }
             }
         });
-    }
-
-    public void onOpenClicked(View view) {
-        TextView textView = findViewById(R.id.textView);
-        Uri uri = Uri.parse(textView.getText().toString()); // missing 'http://' will cause crashed
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(intent);
-    }
-
-    public void onSendClicked(View view) {
-        //TODO
-    }
-
-    @Override
-    public void onBackPressed()
-    {
-        finish();
-        Intent intent = new Intent(this,MainActivity.class);
-        startActivity(intent);
     }
 }

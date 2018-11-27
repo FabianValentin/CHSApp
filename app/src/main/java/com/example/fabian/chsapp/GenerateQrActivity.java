@@ -20,40 +20,35 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.util.ArrayList;
+
 public class GenerateQrActivity extends AppCompatActivity {
 
+    ArrayList<String> contacts;
+    ImageView imgView;
     String name;
     String number;
-
-    Button send_contact;
-
-    ImageView imgView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generate_qr);
         Intent intent = getIntent();
-
-        name = "Fabian";//intent.getStringExtra("contactName");
-        number = "000";//intent.getStringExtra("contactNumber");
-        send_contact = findViewById(R.id.sendContact);
+        contacts = intent.getStringArrayListExtra("contacts");
         imgView = findViewById(R.id.imageView);
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try{
-            BitMatrix bitMatrix = multiFormatWriter.encode(name+"\n"+number, BarcodeFormat.QR_CODE, 200,200);
-            BarcodeEncoder barcodeDetector = new BarcodeEncoder();
-            Bitmap bitmap = barcodeDetector.createBitmap(bitMatrix);
-            imgView.setImageBitmap(bitmap);
-            imgView.setVisibility(View.VISIBLE);
+            for(int i = 0 ; i < contacts.size() ; i++) {
+                int lastSpace = contacts.get(i).lastIndexOf(' ' );
+                name =  "Name: " + contacts.get(i).substring(0, lastSpace) + "\n";
+                number = "Number: " + contacts.get(i).substring(lastSpace) + "\n";
+                BitMatrix bitMatrix = multiFormatWriter.encode(name+number, BarcodeFormat.QR_CODE, 200,200);
+                BarcodeEncoder barcodeDetector = new BarcodeEncoder();
+                Bitmap bitmap = barcodeDetector.createBitmap(bitMatrix);
+                imgView.setImageBitmap(bitmap);
+                imgView.setVisibility(View.VISIBLE);
+            }
         }catch (WriterException e) {
             e.printStackTrace();
         }
-        send_contact.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
     }
 }

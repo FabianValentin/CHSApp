@@ -26,31 +26,4 @@
         app:layout_constraintLeft_toLeftOf="parent"
         tools:ignore="MissingConstraints"></TextView>
 
-    <Button
-        android:id="@+id/send"
-        android:layout_width="112dp"
-        android:layout_height="59dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="44dp"
-        android:onClick="onSendClicked"
-        android:text="@string/send"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toStartOf="@+id/open"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="539dp" />
-
-    <Button
-        android:id="@+id/open"
-        android:layout_width="110dp"
-        android:layout_height="59dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginRight="48dp"
-        android:onClick="onOpenClicked"
-        android:text="@string/open"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
 </android.support.constraint.ConstraintLayout>

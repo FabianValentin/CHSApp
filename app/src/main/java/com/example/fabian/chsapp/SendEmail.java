@@ -32,9 +32,13 @@ public class SendEmail extends AppCompatActivity {
         StringBuilder b = new StringBuilder();
 
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Your contact");
+        String name; String number;
         for( int i = 0 ; i < contacts.size() ; i++) {
-            //emailIntent.putExtra(Intent.EXTRA_TEXT, "Name: " +  getName(contacts.get(i)) + "\n" + "Number: " +  getNumber(contacts.get(i))+ "\n");
-            b.append(contacts.get(i));
+            int lastSpace = contacts.get(i).lastIndexOf(' ' );
+            name =  "Name: " + contacts.get(i).substring(0, lastSpace) + "\n";
+            number = "Number: " + contacts.get(i).substring(lastSpace) + "\n";
+            b.append(name);
+            b.append(number);
             b.append("\n");
         }
         emailIntent.putExtra(Intent.EXTRA_TEXT,b.toString());

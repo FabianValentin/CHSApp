@@ -35,11 +35,9 @@ public class AddContactActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_FOR_CONTACTS_QR) {
             if(resultCode == RESULT_OK) {
-                ArrayList<String> contactsToBeSaved = new ArrayList<>();
-                contactsToBeSaved = data.getStringArrayListExtra("contacts");
-
+                ArrayList<String> contactsToBeSaved = data.getStringArrayListExtra("contacts");
                 saveContacts(contactsToBeSaved);
-                Intent intent = new Intent(this,EndActivity.class);
+                Intent intent = new Intent(this, EndActivity.class);
                 intent.putExtra("text","Contact(s) Saved");
                 intent.putExtra("finalContacts", contactsToBeSaved);
                 startActivity(intent);

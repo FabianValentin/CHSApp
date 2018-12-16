@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -39,9 +40,6 @@ public class ScanQrActivity extends AppCompatActivity {
 
         surfaceView = findViewById(R.id.camerapreview);
         textView = findViewById(R.id.textView);
-
-    }
-    public void initialiseDetectors() {
         barcodeDetector = new BarcodeDetector.Builder(this)
                 .setBarcodeFormats(Barcode.QR_CODE).build();
 
@@ -80,15 +78,16 @@ public class ScanQrActivity extends AppCompatActivity {
 
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
-                final SparseArray<Barcode> qrCode = detections.getDetectedItems();
-                if (qrCode.size() != 0) {
+                final SparseArray<Barcode> barcode = detections.getDetectedItems();
+                if (barcode.size() != 0) {
 
                     String[] contacts;
                     ArrayList<String> contactsToBeSaved = new ArrayList<>();
-                    contacts = qrCode.valueAt(0).toString().split("\\n");
+                    contacts = barcode.valueAt(0).displayValue.split("\\n\\n");
                     int i;
                     for (i = 0; i < contacts.length; i++) {
                         contactsToBeSaved.add(contacts[i]);
+                        Log.d("cnt",contacts[i]);
                     }
                     Intent intent = new Intent();
                     intent.putExtra("contacts", contactsToBeSaved);
@@ -107,6 +106,5 @@ public class ScanQrActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        initialiseDetectors();
     }
 }

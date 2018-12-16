@@ -16,7 +16,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
     private static final int PERMISSION_ALL = 1;
     String[] PERMISSIONS = {
             android.Manifest.permission.READ_CONTACTS,
@@ -29,20 +28,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //se vor cere permisii pentru camera si lista de contacte
         if(!hasPermissions(this, PERMISSIONS)){
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
         }
 
     }
 
+    //aplicatia este separata in 2: partea de adaugare si partea de trimitere a contactelor
     public void add(View view) {
-
+        //se va deschide o pagina cu cele 2 optiune prin care se poate adauga un contact
         Intent intent = new Intent(this, AddContactActivity.class);
         startActivity(intent);
     }
 
     public void send(View view) {
-
+        //se va deschide o lista cu toate contactele pentru a permite utilizatorului sa le selecteze pe cele dorite
         Intent intent = new Intent(this, ChooseContactActivity.class);
         startActivity(intent);
     }
@@ -51,9 +52,9 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_ALL: {
-                // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if(!hasPermissions(this,PERMISSIONS)){
+                        //cererea de permisie
                         ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
                     }
                 } else {
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
                         writeC = true;
                     }
                     int i;
+                    //verificam ce permisii exista deja si le eliminam din lista
                     for(i=0;i<PERMISSIONS.length;i++)
                     {
                         if(camera == true && PERMISSIONS[i].equals(android.Manifest.permission.CAMERA)){
@@ -88,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                             PERMISSIONS = list.toArray(new String[0]);
                         }
                     }
+                    //recursiv, in caz ca utilizatorul a apasat din greseala 'Refuz'
                     if(!hasPermissions(this,PERMISSIONS))
                         ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
                 }
@@ -97,6 +100,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //se verifica permisia pentru camera si contacte(citire si scriere)
+    //daca nu este acordata permisie pentru cel putin una dintre acestea aplicatia o va cere
     public static boolean hasPermissions(Context context, String... permissions) {
         if (context != null && permissions != null) {
             for (String permission : permissions) {

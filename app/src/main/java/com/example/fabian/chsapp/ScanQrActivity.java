@@ -40,19 +40,22 @@ public class ScanQrActivity extends AppCompatActivity {
 
         surfaceView = findViewById(R.id.camerapreview);
         textView = findViewById(R.id.textView);
+        //se creeaza un cititor de coduri
         barcodeDetector = new BarcodeDetector.Builder(this)
                 .setBarcodeFormats(Barcode.QR_CODE).build();
-
+        //partea destinata camerei care va scana codul
         cameraSource = new CameraSource.Builder(this, barcodeDetector)
                 .setRequestedPreviewSize(640, 480).setAutoFocusEnabled(true).build();
 
         surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder surfaceHolder) {
+                //verificare permisiune acces camera
                 if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     return;
                 }
                 try {
+                    //pornim camera pentru a scana codul
                     cameraSource.start(surfaceHolder);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -76,6 +79,7 @@ public class ScanQrActivity extends AppCompatActivity {
 
             }
 
+            //odata reusita scanarea vom prelua contactele
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcode = detections.getDetectedItems();
@@ -84,11 +88,10 @@ public class ScanQrActivity extends AppCompatActivity {
                     String[] contacts;
                     ArrayList<String> contactsToBeSaved = new ArrayList<>();
                     contacts = barcode.valueAt(0).displayValue.split("\\n\\n");
-                    int i;
-                    for (i = 0; i < contacts.length; i++) {
-                        contactsToBeSaved.add(contacts[i]);
-                        Log.d("cnt",contacts[i]);
+                    for (String cnt : contacts) {
+                            contactsToBeSaved.add(cnt);
                     }
+                    //returnam lista de contacte si trimitem un raspuns pozitiv
                     Intent intent = new Intent();
                     intent.putExtra("contacts", contactsToBeSaved);
                     setResult(Activity.RESULT_OK, intent);

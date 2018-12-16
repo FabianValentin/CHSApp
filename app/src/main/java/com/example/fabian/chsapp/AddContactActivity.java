@@ -27,65 +27,95 @@ public class AddContactActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_contact);
     }
 
+    //2 moduri de adaugarea a contactelor
+    //prin scanarea unui QR
     public void scanQr(View view) {
         Intent intent = new Intent(this, ScanQrActivity.class);
+        //asteptam confirmarea faptului ca s-a reusit sscanarea contactelor
         startActivityForResult(intent,REQUEST_CODE_FOR_CONTACTS_QR);
     }
 
+    //receptionarea contactelor dupa scanarea qr-ului
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_FOR_CONTACTS_QR) {
             if(resultCode == RESULT_OK) {
+                //primirea contactelor scanate
                 ArrayList<String> contactsToBeSaved = data.getStringArrayListExtra("contacts");
-                saveContacts(contactsToBeSaved);
-                Intent intent = new Intent(this, EndActivity.class);
-                intent.putExtra("text","Contact(s) Saved");
-                intent.putExtra("finalContacts", contactsToBeSaved);
-                startActivity(intent);
+                for(String con:contactsToBeSaved) {
+                    if (!con.matches("Name:.*\nNumber:.*")) {
+                        Toast.makeText(this, "QR does not contain any contact", Toast.LENGTH_SHORT).show();
+                        return;
+                    }else{
+                        //salvarea contactelor
+                        if(saveContacts(contactsToBeSaved))
+                        {//afisarea confirmarii faptului ca au fost salvate contactele
+                            Intent intent = new Intent(this, EndActivity.class);
+                            intent.putExtra("text", "Contact(s) Saved");
+                            intent.putExtra("finalContacts", contactsToBeSaved);
+                            startActivity(intent);
+                        }
+                    }
+                }
             }
         }
     }
 
+    //prin copierea textului din clip-board
     public void scanEmail(View view) {
         ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         ClipData data = clipboardManager.getPrimaryClip();
         try{
-            ClipData.Item contact = data.getItemAt(0);
-            String conn = contact.toString().substring(contact.toString().indexOf("Name"));
-            String connt = conn.replace("}","");
+            //copierea contactelor din clip-board
+            ClipData.Item contactList = data.getItemAt(0);
             Pattern p = Pattern.compile("\\n[\\n]+");
-            String[] con = p.split(connt.toString());
+            //fiecare element va fi un contact(nume+numar)
+            String[] contacte = p.split(contactList.toString());
             int i;
             ArrayList<String> contactsToBeSaved = new ArrayList<>();
-            for (i = 0; i < con.length; i++) {
-                contactsToBeSaved.add(con[i]);
+            for (i = 0; i < contacte.length; i++) {
+                contactsToBeSaved.add(contacte[i]);
             }
-            saveContacts(contactsToBeSaved);
-            Intent intent = new Intent(this, EndActivity.class);
-            intent.putExtra("text", "Contact(s) Saved");
-            intent.putExtra("finalContacts", contactsToBeSaved);
-            startActivity(intent);
+            for(String con:contactsToBeSaved) {
+                if (!con.matches("Name:.*\nNumber:.*")) {
+                    Toast.makeText(this, "QR does not contain any contact", Toast.LENGTH_SHORT).show();
+                    return;
+                }else{
+                    //salvarea contactelor
+                    if(saveContacts(contactsToBeSaved))
+                    {//afisarea confirmarii faptului ca au fost salvate contactele
+                        Intent intent = new Intent(this, EndActivity.class);
+                        intent.putExtra("text", "Contact(s) Saved");
+                        intent.putExtra("finalContacts", contactsToBeSaved);
+                        startActivity(intent);
+                    }
+                }
+            }
         }catch (Exception e) {
             Toast.makeText(this,"No input.Please copy the contacts in clipboard",Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void saveContacts(ArrayList<String> contacts){
+
+    //metoda care salveaa contactele in telefon
+    public boolean saveContacts(ArrayList<String> contacts){
+        boolean contactSaved = true;
         int i;
         for(i=0;i<contacts.size();i++) {
+            //separarea numelui de numar
             String cname = getName(contacts.get(i).toString());;
             String cnumber= getNumber(contacts.get(i).toString());
 
-            ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+            ArrayList<ContentProviderOperation> cnt = new ArrayList<ContentProviderOperation>();
 
-            ops.add(ContentProviderOperation.newInsert(
+            cnt.add(ContentProviderOperation.newInsert(
                     ContactsContract.RawContacts.CONTENT_URI)
                     .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
                     .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
                     .build());
 
-            //------------------------------------------------------ Names
+            //Completare nume
             if (cname != null) {
-                ops.add(ContentProviderOperation.newInsert(
+                cnt.add(ContentProviderOperation.newInsert(
                         ContactsContract.Data.CONTENT_URI)
                         .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
                         .withValue(ContactsContract.Data.MIMETYPE,
@@ -95,9 +125,10 @@ public class AddContactActivity extends AppCompatActivity {
                                 cname).build());
             }
 
-            //------------------------------------------------------ Mobile Number
+            //Completare numar
             if (cnumber != null) {
-                ops.add(ContentProviderOperation.
+                cnumber.replace("\\s+","");
+                cnt.add(ContentProviderOperation.
                         newInsert(ContactsContract.Data.CONTENT_URI)
                         .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
                         .withValue(ContactsContract.Data.MIMETYPE,
@@ -108,15 +139,17 @@ public class AddContactActivity extends AppCompatActivity {
                         .build());
             }
 
-            // Asking the Contact provider to create a new contact
+            // Adaugare contact daca avem drept pe lista de contacte
             try {
-                getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+                getContentResolver().applyBatch(ContactsContract.AUTHORITY, cnt);
                 Toast.makeText(this, "Contact: " + cname + " saved", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 e.printStackTrace();
-                Toast.makeText(this, "Exception: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                contactSaved=false;
+                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
             }
         }
+        return contactSaved;
     }
 
     private String getName (String s) {
@@ -126,6 +159,6 @@ public class AddContactActivity extends AppCompatActivity {
 
     private String getNumber (String s) {
         String search = "Number: ";
-        return s.substring(s.indexOf(search) + search.length());
+        return s.substring(s.indexOf(search) + search.length() +1);
     }
 }

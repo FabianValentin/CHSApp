@@ -26,25 +26,29 @@ public class GenerateQrActivity extends AppCompatActivity {
 
     ArrayList<String> contacts;
     ImageView imgView;
-    String text = "";
+    String contacte = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generate_qr);
         Intent intent = getIntent();
+        //se preiau contactele ce vor fi trimise trimis
         contacts = intent.getStringArrayListExtra("contacts");
         imgView = findViewById(R.id.imageView);
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try{
+            //formam textul ce va fi continut de codul qr
             for(int i = 0 ; i < contacts.size() ; i++) {
                 int lastSpace = contacts.get(i).lastIndexOf(' ' );
-                text+= "Name: " + contacts.get(i).substring(0, lastSpace) + "\n";
-                text+= "Number: " + contacts.get(i).substring(lastSpace) + "\n";
-                text+="\n";
+                contacte+= "Name: " + contacts.get(i).substring(0, lastSpace) + "\n";
+                contacte+= "Number: " + contacts.get(i).substring(lastSpace) + "\n";
+                contacte+="\n";
             }
-            BitMatrix bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE, 200,200);
+            //criptam contactele in format special pt qr
+            BitMatrix bitMatrix = multiFormatWriter.encode(contacte, BarcodeFormat.QR_CODE, 200,200);
             BarcodeEncoder barcodeDetector = new BarcodeEncoder();
             Bitmap bitmap = barcodeDetector.createBitmap(bitMatrix);
+            //afisam qr-ul
             imgView.setImageBitmap(bitmap);
             imgView.setVisibility(View.VISIBLE);
         }catch (WriterException e) {

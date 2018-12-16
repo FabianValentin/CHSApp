@@ -25,6 +25,7 @@ public class EndActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String text = intent.getStringExtra("text");
         ArrayList<String> finalContacts = intent.getStringArrayListExtra("finalContacts");
+        //afisam un mesaj pentru a informa utilizatorul ca s-a reusit cu succes salvarea contactelor si afisam lista de contacte salvate
         finalText.setText(text);
         finalContactsList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, finalContacts));
     }

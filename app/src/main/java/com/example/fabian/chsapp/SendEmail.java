@@ -17,35 +17,32 @@ public class SendEmail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
+        //se preiau contactele ce vor fi trimise trimis
         ArrayList<String> contacts = intent.getStringArrayListExtra("contacts");
-        /*String name = intent.getStringExtra("contactName");
-        String number = intent.getStringExtra("contactNumber");
-*/
-
-        Log.i("Send email", "");
-
 
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
         emailIntent.setData(Uri.parse("mailto:"));
         emailIntent.setType("text/plain");
 
-        StringBuilder b = new StringBuilder();
+        StringBuilder body = new StringBuilder();
 
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Your contact");
         String name; String number;
+        //se formeaza continutul: contactele care vor fi trimise
         for( int i = 0 ; i < contacts.size() ; i++) {
             int lastSpace = contacts.get(i).lastIndexOf(' ' );
             name =  "Name: " + contacts.get(i).substring(0, lastSpace) + "\n";
             number = "Number: " + contacts.get(i).substring(lastSpace) + "\n";
-            b.append(name);
-            b.append(number);
-            b.append("\n");
+            body.append(name);
+            body.append(number);
+            body.append("\n");
         }
-        emailIntent.putExtra(Intent.EXTRA_TEXT,b.toString());
+        //se seteaza textul
+        emailIntent.putExtra(Intent.EXTRA_TEXT,body.toString());
         try {
+             //se ofera posibilitatea utilizatorului de a alege prin ce aplicatie vor fi trimise contactele
              startActivity(Intent.createChooser(emailIntent, "Send mail..."));
              finish();
-             Log.i("Finished sending email", "");
         } catch (android.content.ActivityNotFoundException ex) {
              Toast.makeText(SendEmail.this,
                   "There is no email client installed.", Toast.LENGTH_SHORT).show();

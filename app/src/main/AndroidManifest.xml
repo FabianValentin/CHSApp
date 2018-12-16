@@ -38,7 +38,8 @@
         <activity android:name=".ChooseContactActivity" />
         <activity android:name=".AddContactActivity" />
         <activity android:name=".SendContactActivity" />
-        <activity android:name=".SendEmail"></activity>
+        <activity android:name=".SendEmail" />
+        <activity android:name=".EndActivity"></activity>
     </application>
 
 </manifest>

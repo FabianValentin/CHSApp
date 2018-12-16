@@ -37,7 +37,12 @@ public class AddContactActivity extends AppCompatActivity {
             if(resultCode == RESULT_OK) {
                 ArrayList<String> contactsToBeSaved = new ArrayList<>();
                 contactsToBeSaved = data.getStringArrayListExtra("contacts");
+
                 saveContacts(contactsToBeSaved);
+                Intent intent = new Intent(this,EndActivity.class);
+                intent.putExtra("text","Contact(s) Saved");
+                intent.putExtra("finalContacts", contactsToBeSaved);
+                startActivity(intent);
             }
         }
     }
@@ -45,15 +50,25 @@ public class AddContactActivity extends AppCompatActivity {
     public void scanEmail(View view) {
         ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         ClipData data = clipboardManager.getPrimaryClip();
-        ClipData.Item contact = data.getItemAt(0);
-        Pattern p = Pattern.compile("\\n[\\n]+");
-        String[] con = p.split(contact.toString());
-        int i;
-        ArrayList<String> contactsToBeSaved = new ArrayList<>();
-        for(i = 0 ; i < con.length ; i++) {
-            contactsToBeSaved.add(con[i]);
+        try{
+            ClipData.Item contact = data.getItemAt(0);
+            String conn = contact.toString().substring(contact.toString().indexOf("Name"));
+            String connt = conn.replace("}","");
+            Pattern p = Pattern.compile("\\n[\\n]+");
+            String[] con = p.split(connt.toString());
+            int i;
+            ArrayList<String> contactsToBeSaved = new ArrayList<>();
+            for (i = 0; i < con.length; i++) {
+                contactsToBeSaved.add(con[i]);
+            }
+            saveContacts(contactsToBeSaved);
+            Intent intent = new Intent(this, EndActivity.class);
+            intent.putExtra("text", "Contact(s) Saved");
+            intent.putExtra("finalContacts", contactsToBeSaved);
+            startActivity(intent);
+        }catch (Exception e) {
+            Toast.makeText(this,"No input.Please copy the contacts in clipboard",Toast.LENGTH_SHORT).show();
         }
-        saveContacts(contactsToBeSaved);
     }
 
     public void saveContacts(ArrayList<String> contacts){

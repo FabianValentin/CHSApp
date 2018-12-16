@@ -83,7 +83,7 @@ public class ChooseContactActivity extends ListActivity {
     public void setupEndActivityButton(View view) {
         int noContacts = lv.getCheckedItemCount();
         if(noContacts == 0){
-            Toast.makeText(view.getContext(),"You have not select any contact",Toast.LENGTH_SHORT).show();
+            Toast.makeText(view.getContext(),"You have not selected any contact",Toast.LENGTH_SHORT).show();
         }
         else {
             Intent intent = new Intent(this, SendContactActivity.class);

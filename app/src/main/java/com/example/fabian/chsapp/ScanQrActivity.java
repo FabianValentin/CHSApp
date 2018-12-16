@@ -40,21 +40,23 @@ public class ScanQrActivity extends AppCompatActivity {
         surfaceView = findViewById(R.id.camerapreview);
         textView = findViewById(R.id.textView);
 
+    }
+    public void initialiseDetectors() {
         barcodeDetector = new BarcodeDetector.Builder(this)
                 .setBarcodeFormats(Barcode.QR_CODE).build();
 
-        cameraSource = new CameraSource.Builder(this,barcodeDetector)
-                .setRequestedPreviewSize(640,480).setAutoFocusEnabled(true).build();
+        cameraSource = new CameraSource.Builder(this, barcodeDetector)
+                .setRequestedPreviewSize(640, 480).setAutoFocusEnabled(true).build();
 
         surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder surfaceHolder) {
-                if(ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                   return;
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    return;
                 }
                 try {
                     cameraSource.start(surfaceHolder);
-                }catch (IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -79,20 +81,32 @@ public class ScanQrActivity extends AppCompatActivity {
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> qrCode = detections.getDetectedItems();
-                if(qrCode.size() != 0) {
-                     String[] contacts;
-                     ArrayList<String> contactsToBeSaved = new ArrayList<>();
-                     contacts = qrCode.toString().split("\\n");
-                     int i;
-                     for(i = 0 ; i < contacts.length ; i++) {
-                         contactsToBeSaved.add(contacts[i]);
-                     }
-                     Intent intent = new Intent();
-                     intent.putExtra("contacts",contactsToBeSaved);
-                     setResult(Activity.RESULT_OK,intent);
-                     finish();
+                if (qrCode.size() != 0) {
+
+                    String[] contacts;
+                    ArrayList<String> contactsToBeSaved = new ArrayList<>();
+                    contacts = qrCode.valueAt(0).toString().split("\\n");
+                    int i;
+                    for (i = 0; i < contacts.length; i++) {
+                        contactsToBeSaved.add(contacts[i]);
+                    }
+                    Intent intent = new Intent();
+                    intent.putExtra("contacts", contactsToBeSaved);
+                    setResult(Activity.RESULT_OK, intent);
+                    finish();
                 }
             }
         });
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        cameraSource.release();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initialiseDetectors();
     }
 }

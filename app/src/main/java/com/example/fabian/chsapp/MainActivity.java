@@ -10,6 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.fabian.chsapp.AddContact.AddContactActivity;
+import com.example.fabian.chsapp.SendContact.ChooseContactActivity;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

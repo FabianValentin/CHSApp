@@ -1,18 +1,16 @@
-package com.example.fabian.chsapp;
+package com.example.fabian.chsapp.AddContact;
 
-import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentProviderOperation;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.provider.ContactsContract;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+
+import com.example.fabian.chsapp.R;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;

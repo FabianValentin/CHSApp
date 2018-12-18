@@ -1,4 +1,4 @@
-package com.example.fabian.chsapp;
+package com.example.fabian.chsapp.AddContact;
 
 import android.Manifest;
 import android.app.Activity;
@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.fabian.chsapp.R;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -39,6 +40,7 @@ public class ScanQrActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scan_qr);
 
         surfaceView = findViewById(R.id.camerapreview);
+        //il folosim pentru a afisa un text de avertizare a utilizatorului: "Please focus on QR"
         textView = findViewById(R.id.textView);
         //se creeaza un cititor de coduri
         barcodeDetector = new BarcodeDetector.Builder(this)

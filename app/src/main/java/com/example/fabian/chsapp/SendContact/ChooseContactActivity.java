@@ -1,4 +1,4 @@
-package com.example.fabian.chsapp;
+package com.example.fabian.chsapp.SendContact;
 
 import android.app.ListActivity;
 import android.content.ContentResolver;
@@ -6,16 +6,15 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.os.Bundle;
-import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckedTextView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.fabian.chsapp.R;
 
 import java.util.ArrayList;
 import java.util.List;

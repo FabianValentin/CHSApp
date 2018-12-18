@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
 import com.example.fabian.chsapp.R;
-
 import java.util.ArrayList;
 
 public class SendContactActivity extends AppCompatActivity {

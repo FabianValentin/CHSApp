@@ -4,18 +4,12 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -24,13 +18,11 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ScanQrActivity extends AppCompatActivity {
 
     SurfaceView surfaceView;
     CameraSource cameraSource;
-    TextView textView;
     BarcodeDetector barcodeDetector;
 
     @Override
@@ -39,7 +31,6 @@ public class ScanQrActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scan_qr);
 
         surfaceView = findViewById(R.id.camerapreview);
-        textView = findViewById(R.id.textView);
         //se creeaza un cititor de coduri
         barcodeDetector = new BarcodeDetector.Builder(this)
                 .setBarcodeFormats(Barcode.QR_CODE).build();

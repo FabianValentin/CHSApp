@@ -6,15 +6,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.os.Bundle;
-import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckedTextView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -22,7 +19,6 @@ import java.util.List;
 
 public class ChooseContactActivity extends ListActivity {
 
-    private Button butonSelectare;
     private ListView listcontacts;
     private List<String> contacte = new ArrayList<>();
     private ArrayList<String> contacteMarcate = new ArrayList<>();
@@ -33,7 +29,6 @@ public class ChooseContactActivity extends ListActivity {
         listcontacts = findViewById(android.R.id.list);
         //CHOICE_MODE_MULTIPLE -> pentru a permite selectarea multipla a contactelor
         listcontacts.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
-        butonSelectare = findViewById(R.id.choose);
         loadContacts();
         listcontacts.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_checked, contacte));
 

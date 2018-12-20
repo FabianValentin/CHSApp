@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddContact.AddContactActivity">
+    tools:context=".AddContact.AddContactActivity"
     android:background="@drawable/background"
     android:gravity="center"
-    android:orientation="vertical"
+    android:orientation="vertical">
 
 
     <Button

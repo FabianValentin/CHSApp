@@ -31,12 +31,10 @@ public class ChooseContactActivity extends AppCompatActivity {
 
     private List<Contact> contacts = new ArrayList<>();
     private ArrayList<Contact> checked_contacts = new ArrayList<>();
+    private ListView list_view;
+    private ContactAdapter adapter;
 
-    private ListView listcontacts;
-    private List<String> contacte = new ArrayList<>();
-    private ArrayList<String> contacteMarcate = new ArrayList<>();
-    private ArrayAdapter<String> adapter;
-    // Search EditText
+    //doesn't select properly
     EditText inputSearch;
 
     @Override
@@ -44,7 +42,7 @@ public class ChooseContactActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_contact);
 
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_checked, contacte);
+        adapter = new ContactAdapter(this, R.layout.contact, contacts);
 
         inputSearch = (EditText) findViewById(R.id.inputSearch);
         inputSearch.addTextChangedListener(new TextWatcher() {
@@ -68,23 +66,11 @@ public class ChooseContactActivity extends AppCompatActivity {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
 
-        listcontacts = findViewById(android.R.id.list);
+        list_view = findViewById(android.R.id.list);
         //CHOICE_MODE_MULTIPLE -> pentru a permite selectarea multipla a contactelor
-        listcontacts.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+        list_view.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
         loadContacts();
-        listcontacts.setAdapter(adapter);
-
-        listcontacts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(checked_contacts.contains(contacts.get(i))) {
-                    checked_contacts.remove(contacts.get(i));
-                }
-                else {
-                    checked_contacts.add(contacts.get(i));
-                }
-            }
-        });
+        list_view.setAdapter(adapter);
     }
 
     //se incarca contactele din lista telefonului
@@ -115,7 +101,6 @@ public class ChooseContactActivity extends AppCompatActivity {
                         //verificare pentru a nu avea duplicate (ex contact salvat in SIM, whatsApp, messenger => 3 duplicate)
                         if(!contacts.contains(contactw)) {
                             contacts.add(contactw);
-                            contacte.add(contactw.s());
                         }
                     }
                     cursor2.close();
@@ -124,7 +109,6 @@ public class ChooseContactActivity extends AppCompatActivity {
         }
         cursor.close();
         //sortam alfabetic lista de contacte
-        java.util.Collections.sort(contacte);
         java.util.Collections.sort(contacts, new Comparator<Contact>() {
             @Override
             public int compare(Contact o1, Contact o2) {
@@ -134,7 +118,8 @@ public class ChooseContactActivity extends AppCompatActivity {
     }
 
     public void setupEndActivityButton(View view) {
-        int noContacts = listcontacts.getCheckedItemCount();
+        this.checked_contacts = adapter.getCheckedContacts();
+        int noContacts = checked_contacts.size();
         if(noContacts == 0){
             //daca nu s-a selectat niciun contact se va afisa un mesaj
             Toast.makeText(view.getContext(),"You have not selected any contact",Toast.LENGTH_SHORT).show();
@@ -142,13 +127,8 @@ public class ChooseContactActivity extends AppCompatActivity {
         else {
             //avem contacte selectate, deci putem trece la urmatorul pas, selectarea modului prin care se vor trimite
             Intent intent = new Intent(this, SendContactActivity.class);
-            java.util.Collections.sort(checked_contacts, new Comparator<Contact>() {
-                @Override
-                public int compare(Contact o1, Contact o2) {
-                    return o1.getName().compareTo(o2.getName());
-                }
-            });
-            intent.putExtra("contacts", checked_contacts);
+
+            intent.putExtra("contacts", this.checked_contacts);
             startActivity(intent);
         }
     }

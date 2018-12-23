@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.fabian.chsapp.R;
+
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
@@ -38,7 +40,7 @@ public class AddContactActivity extends AppCompatActivity {
                 //primirea contactelor scanate
                 ArrayList<String> contactsToBeSaved = data.getStringArrayListExtra("contacts");
                 for(String con:contactsToBeSaved) {
-                    if (!con.matches("Name:.*\nNumber:.*")) {
+                    if (!con.matches(".*Name:.*\nNumber:.*")) {
                         Toast.makeText(this, "QR does not contain any contact", Toast.LENGTH_SHORT).show();
                         return;
                     }else{
@@ -72,8 +74,8 @@ public class AddContactActivity extends AppCompatActivity {
                 contactsToBeSaved.add(contacte[i]);
             }
             for(String con:contactsToBeSaved) {
-                if (!con.matches("Name:.*\nNumber:.*")) {
-                    Toast.makeText(this, "QR does not contain any contact", Toast.LENGTH_SHORT).show();
+                if (!con.matches(".*Name:.*\nNumber:.*")) {
+                    Toast.makeText(this, "You don't have any contact in clip board", Toast.LENGTH_SHORT).show();
                     return;
                 }else{
                     //salvarea contactelor

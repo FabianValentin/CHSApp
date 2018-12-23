@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.example.fabian.chsapp.Contact;
+
 import java.util.ArrayList;
 
 public class SendEmail extends AppCompatActivity {
@@ -16,7 +18,7 @@ public class SendEmail extends AppCompatActivity {
 
         Intent intent = getIntent();
         //se preiau contactele ce vor fi trimise trimis
-        ArrayList<String> contacts = intent.getStringArrayListExtra("contacts");
+        ArrayList<Contact> contacts = (ArrayList<Contact>)intent.getSerializableExtra("contacts");
 
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
         emailIntent.setData(Uri.parse("mailto:"));
@@ -28,12 +30,8 @@ public class SendEmail extends AppCompatActivity {
         String name; String number;
         //se formeaza continutul: contactele care vor fi trimise
         for( int i = 0 ; i < contacts.size() ; i++) {
-            int lastSpace = contacts.get(i).lastIndexOf(' ' );
-            name =  "Name: " + contacts.get(i).substring(0, lastSpace) + "\n";
-            number = "Number: " + contacts.get(i).substring(lastSpace) + "\n";
-            body.append(name);
-            body.append(number);
-            body.append("\n");
+            body.append(contacts.get(i));
+            body.append("\n\n");
         }
         //se seteaza textul
         emailIntent.putExtra(Intent.EXTRA_TEXT,body.toString());

@@ -19,13 +19,18 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.fabian.chsapp.Contact;
 import com.example.fabian.chsapp.MainActivity;
 import com.example.fabian.chsapp.R;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ChooseContactActivity extends AppCompatActivity {
+
+    private List<Contact> contacts = new ArrayList<>();
+    private ArrayList<Contact> checked_contacts = new ArrayList<>();
 
     private ListView listcontacts;
     private List<String> contacte = new ArrayList<>();
@@ -72,10 +77,12 @@ public class ChooseContactActivity extends AppCompatActivity {
         listcontacts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(contacteMarcate.contains(contacte.get(i)))
-                    contacteMarcate.remove(contacte.get(i));
-                else
-                    contacteMarcate.add(contacte.get(i));
+                if(checked_contacts.contains(contacts.get(i))) {
+                    checked_contacts.remove(contacts.get(i));
+                }
+                else {
+                    checked_contacts.add(contacts.get(i));
+                }
             }
         });
     }
@@ -100,11 +107,16 @@ public class ChooseContactActivity extends AppCompatActivity {
                             new String[]{id}, null);
                     while (cursor2.moveToNext()) {
                         String phoneNumber = cursor2.getString(cursor2.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        //formam contactul = nume+numarTel
-                        contact = name + " " + phoneNumber;
+
+                        // Making sure that 0724 313 158 is the same as 0724313158.
+                        phoneNumber = phoneNumber.replaceAll(" ", "");
+                        Contact contactw = new Contact(name, phoneNumber);
+
                         //verificare pentru a nu avea duplicate (ex contact salvat in SIM, whatsApp, messenger => 3 duplicate)
-                        if(!contacte.contains(contact))
-                            contacte.add(contact);
+                        if(!contacts.contains(contactw)) {
+                            contacts.add(contactw);
+                            contacte.add(contactw.s());
+                        }
                     }
                     cursor2.close();
                 }
@@ -113,6 +125,12 @@ public class ChooseContactActivity extends AppCompatActivity {
         cursor.close();
         //sortam alfabetic lista de contacte
         java.util.Collections.sort(contacte);
+        java.util.Collections.sort(contacts, new Comparator<Contact>() {
+            @Override
+            public int compare(Contact o1, Contact o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
     }
 
     public void setupEndActivityButton(View view) {
@@ -124,7 +142,13 @@ public class ChooseContactActivity extends AppCompatActivity {
         else {
             //avem contacte selectate, deci putem trece la urmatorul pas, selectarea modului prin care se vor trimite
             Intent intent = new Intent(this, SendContactActivity.class);
-            intent.putExtra("contacts", contacteMarcate);
+            java.util.Collections.sort(checked_contacts, new Comparator<Contact>() {
+                @Override
+                public int compare(Contact o1, Contact o2) {
+                    return o1.getName().compareTo(o2.getName());
+                }
+            });
+            intent.putExtra("contacts", checked_contacts);
             startActivity(intent);
         }
     }

@@ -6,23 +6,25 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import com.example.fabian.chsapp.Contact;
 import com.example.fabian.chsapp.R;
 import java.util.ArrayList;
 
 public class SendContactActivity extends AppCompatActivity {
 
     private ListView contactsList;
-    ArrayList<String> contacts;
+    ArrayList<Contact> contacts;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_contact);
         Intent intent = getIntent();
         //se preiau contactele selectate
-        contacts = intent.getStringArrayListExtra("contacts");
+        contacts = (ArrayList<Contact>)intent.getSerializableExtra("contacts");
         contactsList = findViewById(R.id.contactList);
         //se afiseaza contactele selectate
-        contactsList.setAdapter(new ArrayAdapter<String>(SendContactActivity.this, android.R.layout.simple_list_item_1, contacts));
+        contactsList.setAdapter(new ArrayAdapter<Contact>(SendContactActivity.this, android.R.layout.simple_list_item_1, contacts));
     }
 
     // 2 posibilitati de trimitere:

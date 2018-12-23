@@ -39,6 +39,7 @@ public class AddContactActivity extends AppCompatActivity {
             if(resultCode == RESULT_OK) {
                 //primirea contactelor scanate
                 ArrayList<String> contactsToBeSaved = data.getStringArrayListExtra("contacts");
+
                 for(String con:contactsToBeSaved) {
                     if (!con.matches(".*Name:.*\nNumber:.*")) {
                         Toast.makeText(this, "QR does not contain any contact", Toast.LENGTH_SHORT).show();

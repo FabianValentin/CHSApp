@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.example.fabian.chsapp.Contact;
 import com.example.fabian.chsapp.R;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -18,7 +20,7 @@ import java.util.ArrayList;
 
 public class GenerateQrActivity extends AppCompatActivity {
 
-    ArrayList<String> contacts;
+    ArrayList<Contact> contacts;
     ImageView imgView;
     String contacte = "";
     @Override
@@ -27,16 +29,13 @@ public class GenerateQrActivity extends AppCompatActivity {
         setContentView(R.layout.activity_generate_qr);
         Intent intent = getIntent();
         //se preiau contactele ce vor fi trimise trimis
-        contacts = intent.getStringArrayListExtra("contacts");
+        contacts = (ArrayList<Contact>)intent.getSerializableExtra("contacts");
         imgView = findViewById(R.id.imageView);
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try{
             //formam textul ce va fi continut de codul qr
             for(int i = 0 ; i < contacts.size() ; i++) {
-                int lastSpace = contacts.get(i).lastIndexOf(' ' );
-                contacte+= "Name: " + contacts.get(i).substring(0, lastSpace) + "\n";
-                contacte+= "Number: " + contacts.get(i).substring(lastSpace) + "\n";
-                contacte+="\n";
+                contacte += contacts.get(i);
             }
             //criptam contactele in format special pt qr
             BitMatrix bitMatrix = multiFormatWriter.encode(contacte, BarcodeFormat.QR_CODE, 200,200);

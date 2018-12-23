@@ -1,4 +1,4 @@
-package com.example.fabian.chsapp;
+package com.example.fabian.chsapp.AddContact;
 
 import android.Manifest;
 import android.app.Activity;
@@ -10,7 +10,9 @@ import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.TextView;
 
+import com.example.fabian.chsapp.R;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;

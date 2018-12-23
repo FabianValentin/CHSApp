@@ -1,4 +1,4 @@
-package com.example.fabian.chsapp;
+package com.example.fabian.chsapp.AddContact;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;

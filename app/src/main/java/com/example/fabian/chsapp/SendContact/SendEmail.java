@@ -1,4 +1,4 @@
-package com.example.fabian.chsapp;
+package com.example.fabian.chsapp.SendContact;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -44,15 +44,6 @@ public class SendEmail extends AppCompatActivity {
         } catch (android.content.ActivityNotFoundException ex) {
              Toast.makeText(SendEmail.this,
                   "There is no email client installed.", Toast.LENGTH_SHORT).show();
-            }
         }
-    private String getName (String s) {
-        String search = "Name: ";
-        return s.substring(s.indexOf(search) + search.length() , s.indexOf("\n"));
-    }
-
-    private String getNumber (String s) {
-        String search = "Number: ";
-        return s.substring(s.indexOf(search) + search.length());
     }
 }

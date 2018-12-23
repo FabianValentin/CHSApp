@@ -1,4 +1,4 @@
-package com.example.fabian.chsapp;
+package com.example.fabian.chsapp.SendContact;
 
 import android.app.ListActivity;
 import android.content.ContentResolver;
@@ -6,7 +6,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,14 +19,18 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.fabian.chsapp.MainActivity;
+import com.example.fabian.chsapp.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChooseContactActivity extends ListActivity {
+public class ChooseContactActivity extends AppCompatActivity {
 
     private ListView listcontacts;
     private List<String> contacte = new ArrayList<>();
     private ArrayList<String> contacteMarcate = new ArrayList<>();
+    private ArrayAdapter<String> adapter;
     // Search EditText
     EditText inputSearch;
 
@@ -30,11 +38,36 @@ public class ChooseContactActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_contact);
+
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_checked, contacte);
+
+        inputSearch = (EditText) findViewById(R.id.inputSearch);
+        inputSearch.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+                // When user changed the Text
+                ChooseContactActivity.this.adapter.getFilter().filter(cs);
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+                                          int arg3) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+            }
+        });
+
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+
         listcontacts = findViewById(android.R.id.list);
         //CHOICE_MODE_MULTIPLE -> pentru a permite selectarea multipla a contactelor
         listcontacts.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
         loadContacts();
-        listcontacts.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_checked, contacte));
+        listcontacts.setAdapter(adapter);
 
         listcontacts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

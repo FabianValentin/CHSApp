@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ScanQrActivity"
+            android:name=".AddContact.ScanQrActivity"
             android:parentActivityName=".MainActivity">
 
             <!-- The meta-data tag is required if you support API level 15 and lower -->
@@ -34,12 +34,12 @@
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
 
-        <activity android:name=".GenerateQrActivity" />
-        <activity android:name=".ChooseContactActivity" />
-        <activity android:name=".AddContactActivity" />
-        <activity android:name=".SendContactActivity" />
-        <activity android:name=".SendEmail" />
-        <activity android:name=".EndActivity"></activity>
+        <activity android:name=".SendContact.GenerateQrActivity" />
+        <activity android:name=".SendContact.ChooseContactActivity" />
+        <activity android:name=".AddContact.AddContactActivity" />
+        <activity android:name=".SendContact.SendContactActivity" />
+        <activity android:name=".SendContact.SendEmail" />
+        <activity android:name=".AddContact.EndActivity"></activity>
     </application>
 
 </manifest>

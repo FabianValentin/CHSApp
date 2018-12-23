@@ -4,27 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
-    tools:context="com.example.fabian.chsapp.ScanQrActivity">
+    tools:context="com.example.fabian.chsapp.AddContact.ScanQrActivity"
+    android:background="@drawable/background">
 
     <SurfaceView
         android:id="@+id/camerapreview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"></SurfaceView>
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/camerapreview"
-        android:layout_marginBottom="76dp"
-        android:layout_marginLeft="8dp"
-        android:gravity="center"
-        android:text="Please focus on QR code"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        tools:ignore="MissingConstraints"></TextView>
 
 </android.support.constraint.ConstraintLayout>

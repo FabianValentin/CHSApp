@@ -29,12 +29,10 @@ import java.util.List;
 
 public class ChooseContactActivity extends AppCompatActivity {
 
-    private List<Contact> contacts = new ArrayList<>();
+    private ArrayList<Contact> contacts = new ArrayList<>();
     private ArrayList<Contact> checked_contacts = new ArrayList<>();
     private ListView list_view;
     private ContactAdapter adapter;
-
-    //doesn't select properly
     EditText inputSearch;
 
     @Override

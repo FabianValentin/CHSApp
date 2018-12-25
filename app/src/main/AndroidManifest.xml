@@ -35,7 +35,8 @@
             android:value="barcode" />
 
         <activity android:name=".SendContact.GenerateQrActivity" />
-        <activity android:name=".SendContact.ChooseContactActivity" />
+        <activity android:name=".SendContact.ChooseContactActivity"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".AddContact.AddContactActivity" />
         <activity android:name=".SendContact.SendContactActivity" />
         <activity android:name=".SendContact.SendEmail" />

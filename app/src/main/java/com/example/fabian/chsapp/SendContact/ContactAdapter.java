@@ -4,30 +4,47 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.example.fabian.chsapp.Contact;
-import com.example.fabian.chsapp.MainActivity;
 import com.example.fabian.chsapp.R;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class ContactAdapter extends ArrayAdapter<Contact> {
+public class ContactAdapter extends BaseAdapter implements Filterable {
     private int resourceLayout;
     private Context mContext;
-    private List<Contact> contacts;
+    private ArrayList<Contact> original_contacts;
     private ArrayList<Contact> checked_contacts;
+    private ArrayList<Contact> filtered_contacts;
 
-    public ContactAdapter(Context context, int resource, List<Contact> items) {
-        super(context, resource, items);
+    public ContactAdapter(Context context, int resource, ArrayList<Contact> contacts) {
         this.resourceLayout = resource;
         this.mContext = context;
-        this.contacts = items;
+        this.original_contacts = contacts;
         this.checked_contacts = new ArrayList<>();
+        this.filtered_contacts = contacts;
+    }
+
+    @Override
+    public int getCount() {
+        return filtered_contacts.size();
+    }
+
+    @Override
+    public Object getItem(int i) {
+        return filtered_contacts.get(i);
+    }
+
+    @Override
+    public long getItemId(int i) {
+        return i;
     }
 
     @Override
@@ -41,7 +58,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
             v = vi.inflate(resourceLayout, null);
         }
 
-        Contact contact = getItem(position);
+        Contact contact = (Contact) getItem(position);
 
         if (contact != null) {
             TextView tt1 = (TextView) v.findViewById(R.id.name);
@@ -54,12 +71,12 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
                 tt2.setText(contact.getNumber());
             }
 
-            checkBox.setChecked(contacts.get(position).isChecked());
+            checkBox.setChecked(filtered_contacts.get(position).isChecked());
 
             checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    checked_contacts.add(contacts.get(position));
+                    checked_contacts.add(filtered_contacts.get(position));
                 }
             });
         }
@@ -74,5 +91,46 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
             }
         });
         return this.checked_contacts;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+
+                filtered_contacts = (ArrayList<Contact>) results.values; // has the filtered values
+                notifyDataSetChanged();  // notifies the data with new filtered values
+            }
+
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                FilterResults results = new FilterResults();        // Holds the results of a filtering operation in values
+                List<Contact> filteredArrList = new ArrayList<Contact>();
+
+                 //If constraint(CharSequence that is received) is null returns the mOriginalValues(Original) values
+                 //else does the Filtering and returns FilteredArrList(Filtered)
+
+                if (constraint == null || constraint.length() == 0) {
+
+                    // set the Original result to return
+                    results.count = original_contacts.size();
+                    results.values = original_contacts;
+                } else {
+                    constraint = constraint.toString().toLowerCase();
+                    for (Contact contact : original_contacts) {
+                        if (contact.getName().toLowerCase().contains(constraint.toString().toLowerCase())) {
+                            filteredArrList.add(contact);
+                        }
+                    }
+                    // set the Filtered result to return
+                    results.count = filteredArrList.size();
+                    results.values = filteredArrList;
+                }
+                return results;
+            }
+        };
     }
 }

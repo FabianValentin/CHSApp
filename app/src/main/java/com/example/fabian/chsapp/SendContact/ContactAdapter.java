@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.fabian.chsapp.Contact;
 import com.example.fabian.chsapp.R;
@@ -63,7 +64,7 @@ public class ContactAdapter extends BaseAdapter implements Filterable {
         if (contact != null) {
             TextView tt1 = (TextView) v.findViewById(R.id.name);
             TextView tt2 = (TextView) v.findViewById(R.id.number);
-            CheckBox checkBox = (CheckBox) v.findViewById(R.id.checked);
+            final CheckBox checkBox = (CheckBox) v.findViewById(R.id.checked);
             if (tt1 != null) {
                 tt1.setText(contact.getName());
             }
@@ -76,7 +77,16 @@ public class ContactAdapter extends BaseAdapter implements Filterable {
             checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    checked_contacts.add(filtered_contacts.get(position));
+                    if (checkBox.isChecked() == true) {
+                        if (checked_contacts.size() == 20) {
+                            Toast.makeText(view.getContext(), "Can't select more than 20 contacts.", Toast.LENGTH_SHORT).show();
+                            checkBox.setChecked(false);
+                        } else {
+                            checked_contacts.add(filtered_contacts.get(position));
+                        }
+                    } else {
+                        checked_contacts.remove(filtered_contacts.get(position));
+                    }
                 }
             });
         }

@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:configChanges="orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,7 +23,8 @@
         </activity>
         <activity
             android:name=".AddContact.ScanQrActivity"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:configChanges="orientation">
 
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
@@ -34,13 +36,25 @@
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
 
-        <activity android:name=".SendContact.GenerateQrActivity" />
+        <activity android:name=".SendContact.GenerateQrActivity"
+            android:configChanges="orientation"/>
+
         <activity android:name=".SendContact.ChooseContactActivity"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".AddContact.AddContactActivity" />
-        <activity android:name=".SendContact.SendContactActivity" />
-        <activity android:name=".SendContact.SendEmail" />
-        <activity android:name=".AddContact.EndActivity"></activity>
+            android:windowSoftInputMode="stateHidden"
+            android:configChanges="orientation"/>
+
+        <activity
+            android:name=".AddContact.AddContactActivity"
+            android:configChanges="orientation"/>
+
+        <activity android:name=".SendContact.SendContactActivity"
+            android:configChanges="orientation"/>
+
+        <activity android:name=".SendContact.SendEmail"
+            android:configChanges="orientation"/>
+
+        <activity android:name=".AddContact.EndActivity"
+            android:configChanges="orientation"></activity>
     </application>
 
 </manifest>

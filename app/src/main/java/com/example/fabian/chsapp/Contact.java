@@ -21,6 +21,8 @@ public class Contact implements Serializable {
         return this.number;
     }
 
+    public void setChecked(boolean checked) { this.checked = checked; }
+
     public boolean isChecked() {
         return this.checked;
     }

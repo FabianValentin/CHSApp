@@ -72,6 +72,7 @@ public class ContactAdapter extends BaseAdapter implements Filterable {
                 tt2.setText(contact.getNumber());
             }
 
+
             checkBox.setChecked(filtered_contacts.get(position).isChecked());
 
             checkBox.setOnClickListener(new View.OnClickListener() {
@@ -83,9 +84,11 @@ public class ContactAdapter extends BaseAdapter implements Filterable {
                             checkBox.setChecked(false);
                         } else {
                             checked_contacts.add(filtered_contacts.get(position));
+                            filtered_contacts.get(position).setChecked(true);
                         }
                     } else {
                         checked_contacts.remove(filtered_contacts.get(position));
+                        filtered_contacts.get(position).setChecked(false);
                     }
                 }
             });

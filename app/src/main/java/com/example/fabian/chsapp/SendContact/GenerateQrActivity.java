@@ -16,11 +16,13 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 public class GenerateQrActivity extends AppCompatActivity {
 
     ArrayList<Contact> contacts;
+    ArrayList<Contact> encodedContacts;
     ImageView imgView;
     String contacte = "";
     @Override
@@ -30,12 +32,14 @@ public class GenerateQrActivity extends AppCompatActivity {
         Intent intent = getIntent();
         //se preiau contactele ce vor fi trimise trimis
         contacts = (ArrayList<Contact>)intent.getSerializableExtra("contacts");
+        encodedContacts = contacts;
         imgView = findViewById(R.id.imageView);
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try{
             //formam textul ce va fi continut de codul qr
-            for(int i = 0 ; i < contacts.size() ; i++) {
-                contacte += contacts.get(i);
+            for(int i = 0 ; i < encodedContacts.size() ; i++) {
+                encodedContacts.get(i).setName(URLEncoder.encode(encodedContacts.get(i).getName()));
+                contacte += encodedContacts.get(i);
             }
             //criptam contactele in format special pt qr
             BitMatrix bitMatrix = multiFormatWriter.encode(contacte, BarcodeFormat.QR_CODE, 200,200);

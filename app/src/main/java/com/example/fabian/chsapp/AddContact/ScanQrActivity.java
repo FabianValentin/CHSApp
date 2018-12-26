@@ -19,6 +19,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 
 public class ScanQrActivity extends AppCompatActivity {
@@ -82,7 +83,7 @@ public class ScanQrActivity extends AppCompatActivity {
                     ArrayList<String> contactsToBeSaved = new ArrayList<>();
                     contacts = barcode.valueAt(0).displayValue.split("\\n\\n");
                     for (String cnt : contacts) {
-                            contactsToBeSaved.add(cnt);
+                            contactsToBeSaved.add(URLDecoder.decode(cnt));
                     }
                     //returnam lista de contacte si trimitem un raspuns pozitiv
                     Intent intent = new Intent();

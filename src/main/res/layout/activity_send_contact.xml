@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SendContact.SendContactActivity"
+    android:background="@drawable/background">
+
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:background="@drawable/shape"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:onClick="generateQR"
+            android:layout_marginRight="5dp"
+            android:text="@string/generateQr"/>
+
+        <Button
+            android:background="@drawable/shape"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:onClick="sendEmail"
+            android:layout_marginLeft="5dp"
+            android:text="@string/sendEmail"/>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/contactList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="60dp"/>
+
+</RelativeLayout>

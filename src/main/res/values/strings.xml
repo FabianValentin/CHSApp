@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Contacts scanner</string>
+    <string name="sendBtn">Send contacts</string>
+    <string name="addBtn">Add contacts</string>
+    <string name="scanQr">Scan QR</string>
+    <string name="scanText">Scan text</string>
+    <string name="generateQr">Generate QR</string>
+    <string name="sendEmail">Send Message</string>
+</resources>

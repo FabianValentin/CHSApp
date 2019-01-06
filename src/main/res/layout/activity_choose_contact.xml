@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.fabian.chsapp.SendContact.ChooseContactActivity"
+    android:background="@drawable/background">
+
+    <EditText android:id="@+id/inputSearch"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="Search contacts"
+        android:inputType="textVisiblePassword"
+        android:backgroundTint="@color/colorPrimary"/>
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="55dp"
+        android:layout_below="@id/inputSearch"/>
+
+    <Button
+        android:id="@+id/choose"
+        android:text="Choose"
+        android:background="@drawable/shape"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:onClick="setupEndActivityButton"
+        android:layout_marginBottom="5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
+</RelativeLayout>
